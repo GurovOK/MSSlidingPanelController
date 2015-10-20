@@ -37,6 +37,8 @@
 
 CGFloat     g_animationVelocity = 640;
 NSUInteger  g_panelMaximumWidth = 280;
+CGFloat     g_centerViewShadowOpacity = 0.8;
+CGFloat     g_centerViewShadowRadius = 10.;
 
 #pragma mark - Enumeration
 
@@ -619,7 +621,12 @@ typedef NS_ENUM(NSUInteger, MSSPPanTouchLocation)
     [[self statusBarView] setUserInteractionEnabled:NO];
     
     [self setCenterView:[[MSSlidingPanelCenterView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)]];
-    [[self centerView] setSlidingPanelController:self];
+    [self centerView].layer.masksToBounds = NO;
+    [self centerView].layer.shadowPath = [[UIBezierPath bezierPathWithRect:self.centerView.bounds] CGPath];
+    [self centerView].layer.shadowRadius = g_centerViewShadowRadius;
+    [self centerView].layer.shadowOpacity = g_centerViewShadowOpacity;
+    [self centerView].layer.shadowColor = [UIColor blackColor].CGColor;
+	[[self centerView] setSlidingPanelController:self];
     [[[self centerViewController] view] setFrame:[[self centerView] frame]];
     [[[self centerViewController] view] setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
     [[self centerView] addSubview:[[self centerViewController] view]];
